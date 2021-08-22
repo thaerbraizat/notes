@@ -1,5 +1,5 @@
 # notes
-##  Author: John Cokos
+##  Author: Thaer Braizat
 
 ## Setup
 * env requirements
