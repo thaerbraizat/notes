@@ -1,0 +1,26 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "caps.js",
+  "scripts": {
+    "test": " jest --coverage --verbose"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thaerbraizat/notes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thaerbraizat/notes/issues"
+  },
+  "homepage": "https://github.com/thaerbraizat/notes#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "faker": "^5.5.3",
+    "jest": "^27.0.6"
+  }
+}
