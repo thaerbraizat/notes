@@ -1,42 +1,25 @@
+// const events = require('./events');
+'use strict';
 let faker = require('faker');
-const events = require('./events');
 
-require('dotenv').config();
+const io = require('socket.io-client');
 
+let host = 'http://localhost:3000';
 
+const storeConnection = io.connect(host);
 
-    class Fake{
-        constructor(orderId,customerName,address){
-            this.storeName=process.env.STORE;
-            this.customerName=customerName;
-            this.orderId=orderId;
-            this.address=address;
-        }
-    }
-  
+// brainConnection.on('brightness', payload=> {
+//     if (payload.brightness >= 75) {
+//         console.log('Cover your eyes ... !')
+//     }
+// })
 
 
 
-    setInterval ( function(){ 
-        let customerName = faker.name.findName();
-        let orderId = faker.phone.phoneNumber();
-        let address = faker.address.streetAddress();
-        
-        let payload = 
-            new Fake(orderId,customerName,address)
-
-            // storeName: process.env.STORE,
-            // orderId: orderId,
-            // customerName: customerName,
-            // address: address
-       
-        events.emit('pickup', payload)
-
-    }, 5000);
 
 
 
-events.on('delivered', deliveredOrderHandler);
+    storeConnection.on('delivered', deliveredOrderHandler);
 
 
 
