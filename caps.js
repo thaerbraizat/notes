@@ -1,76 +1,54 @@
-'use strict';
-'use strict';
-let faker = require('faker');
-const port = process.env.PORT || 3000;
-const io = require('socket.io')(port);
+"use strict";
+
+
+require('dotenv').config();
+const port=process.env.PORT || 3002;
+const io=require('socket.io')(port);
+const caps=io.of('/caps')
 
 
 
-class Fake {
-    constructor(orderId, customerName, address) {
-        this.storeName = process.env.STORE;
-        this.customerName = customerName;
-        this.orderId = orderId;
-        this.address = address;
-    }
-}
+let time = new Date()
 
-
-
-
-setInterval(function () {
-    let customerName = faker.name.findName();
-    let orderId = faker.phone.phoneNumber();
-    let address = faker.address.streetAddress();
-
-    let payload =
-        new Fake(orderId, customerName, address)
-
-    // storeName: process.env.STORE,
-    // orderId: orderId,
-    // customerName: customerName,
-    // address: address
-
-    io.emit('pickup', payload);
-
-    io.emit('in-transit',payload );
-    io.emit('delivered', payload);
-
-}, 5000);
-
-
-
-
-function pickupOrderHandler(payload) {
-
-    setTimeout(function () {
-        // console.log(`DRIVER: picked up ${payload.orderId}`);
-        storeConnection.emit('in-transit', payload);
-    }, 1000);
-
-    setTimeout(function () {
-        // console.log(`DRIVER: delivered up ${payload.orderId}`);
-        storeConnection.emit('delivered', payload);
-    }, 3000);
-}
-
-io.on('pickup', pickupOrderHandler, (payload) => {
-    alllogs('pickup', payload)
+io.on('connection',socket=>{
+    console.log('CONNECTED SUCCESSFULLY ',socket.id);
 });
 
+caps.on('connection',socket=>{
+    console.log('CONNECTED SUCCESSFULLY ',socket.id);
 
-io.on('in-transit', (payload) => {
-    alllogs('in-transit', payload)
-});
-io.on('delivered', (payload) => {
-    alllogs('delivered ', payload)
-});
+    socket.on('pickup',payload=>{
+        console.log('event:',{
+            event:'pickup',
+            time:time,
+            payload:payload
+        });
+        caps.emit('driverPickup',payload);
+    });
+
+    socket.on('transit',payload=>{
+        console.log('event:',{
+            event:'transit',
+            time:time,
+            payload:payload
+        });
+        caps.emit('driverTransit',payload);
+    });
+
+    socket.on('delivered',payload=>{
+        console.log('event:',{
+            event:'delivered',
+            time:time,
+            payload:payload
+        });
+        caps.emit('delivered',payload);
+        caps.emit('vendorDelivered',payload);
+    });
 
 
-function alllogs(event, payload) {
-    console.log('EVENT', { event, time: new Date().toLocaleString(), payload });
-}
+})
 
-console.log('dota2 shop');
-require('./vendor.js');
-require('./driver.js');
+
+
+
+// module.exports=caps
