@@ -27,13 +27,7 @@ setInterval(function () {
 
     let payload =
         new Fake(orderId, customerName, address)
-
-    // storeName: process.env.STORE,
-    // orderId: orderId,
-    // customerName: customerName,
-    // address: address
-
-    socket.emit('pickup', payload);
+         socket.emit('pickup', payload);
 
    
 }, 5000);
